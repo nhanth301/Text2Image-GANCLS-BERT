@@ -54,14 +54,3 @@ You can also access the hosted version of the app at:
 2. Click the **Generate Image** button.
 3. The model processes the text and generates an image.
 
-## Contributing
-
-Feel free to submit issues or pull requests to improve the project.
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-Developed by [Nhan Nguyen Thien] 🚀
