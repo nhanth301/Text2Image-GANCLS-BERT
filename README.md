@@ -49,8 +49,8 @@ You can also access the hosted version of the app at:
 
 
 ## Example Usage
-
-1. Enter a text description such as *"a pink water lily in the middle of a lily"*.
+![examle](outputs/demo.png)
+1. Enter a text description such as *"a pink water lily in the water with a pink flower"*.
 2. Click the **Generate Image** button.
 3. The model processes the text and generates an image.
 
