@@ -14,7 +14,11 @@ embed_out_dim = 64
 def load_model():
     generator = Generator(channels=3, embed_dim=embed_dim, 
                             noise_dim=noise_dim, embed_out_dim=embed_out_dim).to(device)
-    generator.load_state_dict(torch.load('models/generator_bert.pth'))
+    if device == 'cuda':
+        generator.load_state_dict(torch.load('models/generator_bert.pth'))
+    else: 
+        generator.load_state_dict(torch.load('models/generator_bert.pth',  
+                                         map_location=torch.device('cpu')))  
     generator.eval() 
     return generator
 
