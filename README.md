@@ -27,8 +27,8 @@ To run the application on your local machine:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-repo/text2image-gancls-bert.git
-   cd text2image-gancls-bert
+   git clone https://github.com/nhanth301/Text2Image-GANCLS-BERT.git
+   cd Text2Image-GANCLS-BERT
    ```
 
 2. **Download Pretrained Models**: Place the pretrained model (`generator_bert.pth`) inside the `models/` directory.
