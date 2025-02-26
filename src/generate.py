@@ -11,7 +11,7 @@ generator = Generator(channels=3, embed_dim=embed_dim,
                           noise_dim=noise_dim, embed_out_dim=embed_out_dim).to(device)
 generator.load_state_dict(torch.load('models/generator_bert.pth'))
 generator.eval() 
-sentence = 'a purple passion flower'
+sentence = 'colorful flower in a pool'
 embeddings = convert_text_to_feature([str(sentence)])
 noise = torch.randn(1, noise_dim, 1, 1, device=device)
 pred = generator(noise, embeddings)
