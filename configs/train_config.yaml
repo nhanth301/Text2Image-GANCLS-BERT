@@ -1,0 +1,6 @@
+batch_size: 4
+learning_rate: 0.0002
+epochs: 10
+dataset: pranked03/flowers-blip-captions
+l1_coeff: 50
+l2_coeff: 100

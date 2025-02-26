@@ -1,0 +1,3 @@
+2025-02-26 10:57:17,490 - INFO - Epoch 1 [1/1] loss_D: 2.0977 loss_G: 54.8119 time: 0.69
+2025-02-26 10:57:17,657 - INFO - Epoch 2 [1/1] loss_D: 0.4553 loss_G: 55.0261 time: 0.17
+2025-02-26 10:57:17,686 - INFO - Training complete!!!!
