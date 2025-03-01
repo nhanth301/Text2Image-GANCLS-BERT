@@ -2,7 +2,7 @@
 
 This project implements a Text-to-Image generation model using the GAN-CLS framework combined with a BERT-based text encoder. The model takes a text prompt as input and generates a corresponding image.
 
-![GAN-CLS Architecture](outputs/diagram.png)
+![GAN-CLS Architecture](outputs/drawio.png)
 
 ## Features
 
