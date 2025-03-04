@@ -5,6 +5,9 @@ import numpy as np
 from src.model import Generator
 from src.sr_model import SR_Unet  # Import mô hình Generator
 from src.utils import convert_text_to_feature
+import torch.hub
+import gdown
+import os
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 embed_dim = 768
@@ -14,19 +17,27 @@ embed_out_dim = 64
 @st.cache_resource
 def load_model():
     generator = Generator(channels=3, embed_dim=embed_dim, 
-                            noise_dim=noise_dim, embed_out_dim=embed_out_dim).to(device)
+                          noise_dim=noise_dim, embed_out_dim=embed_out_dim).to(device)
     sr_unet = SR_Unet().to(device)
-    if device == 'cuda':
-        generator.load_state_dict(torch.load('models/generator_bert.pth'))
-        sr_unet.load_state_dict(torch.load('models/SR_unet_model.pt'))
-    else: 
-        generator.load_state_dict(torch.load('models/generator_bert.pth',  
-                                         map_location=torch.device('cpu')))
-        sr_unet.load_state_dict(torch.load('models/SR_unet_model.pt',
-                                         map_location=torch.device('cpu'))) 
-    generator.eval() 
+
+    # Tải mô hình từ Google Drive nếu chưa có
+    unet_path = "models/sr_unet.pth"
+    unet_url = "https://drive.google.com/uc?export=download&id=1hEGvRbJq4G_LVGSd1ZozA8UUMJzG1MBp"
+    
+    if not os.path.exists(unet_path):
+        gdown.download(unet_url, unet_path, quiet=False)
+
+    if device == "cuda":
+        generator.load_state_dict(torch.load("models/generator_bert.pth"))
+        sr_unet.load_state_dict(torch.load(unet_path))
+    else:
+        generator.load_state_dict(torch.load("models/generator_bert.pth", map_location="cpu"))
+        sr_unet.load_state_dict(torch.load(unet_path, map_location="cpu"))
+
+    generator.eval()
     sr_unet.eval()
     return generator, sr_unet
+
 
 def generate_image(text, generator, sr_unet):
     with torch.no_grad():
