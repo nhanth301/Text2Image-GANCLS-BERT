@@ -4,7 +4,6 @@ from PIL import Image
 import numpy as np
 from src.model import Generator
 from src.sr_model import SR_Unet 
-from src.ip_model import II_Unet
 from src.utils import convert_text_to_feature
 import torch.hub
 import gdown
