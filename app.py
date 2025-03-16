@@ -29,6 +29,10 @@ def load_model():
     gen_unet_path = "models/gen_unet.pth"
     gen_unet_url = "https://drive.google.com/uc?export=download&id=1D578OukaER86K1KpyNWQJdDUPTtTHqzd"
 
+    model_path = "models"
+
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
     
     if not os.path.exists(sr_unet_path):
         gdown.download(sr_unet_url, sr_unet_path, quiet=False)
