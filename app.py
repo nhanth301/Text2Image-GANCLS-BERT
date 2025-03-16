@@ -3,16 +3,19 @@ import torch
 from PIL import Image
 import numpy as np
 from src.model import Generator
-from src.sr_model import SR_Unet  # Import mô hình Generator
+from src.sr_model import SR_Unet 
+from src.ip_model import II_Unet
 from src.utils import convert_text_to_feature
 import torch.hub
 import gdown
 import os
-
+from torchvision import transforms
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 embed_dim = 768
 noise_dim = 100
 embed_out_dim = 64
+
+
 
 @st.cache_resource
 def load_model():
@@ -20,19 +23,27 @@ def load_model():
                           noise_dim=noise_dim, embed_out_dim=embed_out_dim).to(device)
     sr_unet = SR_Unet().to(device)
 
-    # Tải mô hình từ Google Drive nếu chưa có
-    unet_path = "models/sr_unet.pth"
-    unet_url = "https://drive.google.com/uc?export=download&id=1hEGvRbJq4G_LVGSd1ZozA8UUMJzG1MBp"
+    sr_unet_path = "models/sr_unet.pth"
+    sr_unet_url = "https://drive.google.com/uc?export=download&id=1hEGvRbJq4G_LVGSd1ZozA8UUMJzG1MBp"
     
-    if not os.path.exists(unet_path):
-        gdown.download(unet_url, unet_path, quiet=False)
+    gen_unet_path = "models/gen_unet.pth"
+    gen_unet_url = "https://drive.google.com/uc?export=download&id=1D578OukaER86K1KpyNWQJdDUPTtTHqzd"
+
+    
+    if not os.path.exists(sr_unet_path):
+        gdown.download(sr_unet_url, sr_unet_path, quiet=False)
+    
+    if not os.path.exists(gen_unet_path):
+        gdown.download(gen_unet_url, gen_unet_path, quiet=False)
 
     if device == "cuda":
-        generator.load_state_dict(torch.load("models/generator_bert.pth"))
-        sr_unet.load_state_dict(torch.load(unet_path))
+        generator.load_state_dict(torch.load(gen_unet_path))
+        sr_unet.load_state_dict(torch.load(sr_unet_path))
+
     else:
-        generator.load_state_dict(torch.load("models/generator_bert.pth", map_location="cpu"))
-        sr_unet.load_state_dict(torch.load(unet_path, map_location="cpu"))
+        generator.load_state_dict(torch.load(gen_unet_path, map_location="cpu"))
+        sr_unet.load_state_dict(torch.load(sr_unet_path, map_location="cpu"))
+
 
     generator.eval()
     sr_unet.eval()
@@ -44,20 +55,20 @@ def generate_image(text, generator, sr_unet):
         embeddings = convert_text_to_feature([str(text)])
         noise = torch.randn(1, noise_dim, 1, 1, device=device)
 
-        # Ảnh từ GAN
         gen_img = generator(noise, embeddings)
 
-        # Ảnh sau khi qua Super-Resolution UNet
-        pred = sr_unet(gen_img)
+        sr_img = sr_unet(gen_img)
 
-    # Chuyển ảnh từ tensor sang định dạng có thể hiển thị
+
     gen_img_np = gen_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy()
     gen_img_np = (gen_img_np * 255).astype(np.uint8)
 
-    pred_np = pred.squeeze(0).permute(1, 2, 0).detach().cpu().numpy()
-    pred_np = (pred_np * 255).astype(np.uint8)
+    sr_img_np = sr_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy()
+    sr_img_np = (sr_img_np * 255).astype(np.uint8)
 
-    return Image.fromarray(gen_img_np), Image.fromarray(pred_np)
+
+
+    return Image.fromarray(gen_img_np), Image.fromarray(sr_img_np)
 
 
 
@@ -82,10 +93,11 @@ with col1:
             gen_image, sr_image = generate_image(text_prompt, generator, sr_unet)
 
             with col2:
-                st.image(gen_image, caption="Generated Image", width=512)
+                st.image(gen_image, caption="Generated Image", width=400)
 
             with col3:
-                st.image(sr_image, caption="Generated Image + Super Resolution", width=512)
+                st.image(sr_image, caption="Generated Image + Super Resolution", width=400)
+            
 
                     
 
