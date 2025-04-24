@@ -26,7 +26,7 @@ def load_model():
     sr_unet_url = "https://drive.google.com/uc?export=download&id=1hEGvRbJq4G_LVGSd1ZozA8UUMJzG1MBp"
     
     gen_unet_path = "models/gen_unet.pth"
-    gen_unet_url = "https://drive.google.com/uc?export=download&id=1D578OukaER86K1KpyNWQJdDUPTtTHqzd"
+    gen_unet_url = "https://drive.google.com/uc?export=download&id=1-YHhH8ik6TCcCK0D8vG83yBo5OgExy-X"
 
     model_path = "models"
 
