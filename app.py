@@ -11,8 +11,8 @@ import os
 from torchvision import transforms
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 embed_dim = 768
-noise_dim = 100
-embed_out_dim = 64
+noise_dim = 128
+embed_out_dim = 256
 
 
 
