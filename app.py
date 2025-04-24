@@ -63,10 +63,10 @@ def generate_image(text, generator, sr_unet):
         sr_img = sr_unet(gen_img)
 
 
-    gen_img_np = np.clip(gen_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy(),0,1)
+    gen_img_np = np.clip(gen_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy()*0.5+0.5,0,1)
     gen_img_np = (gen_img_np * 255).astype(np.uint8)
 
-    sr_img_np = np.clip(sr_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy(),0,1)
+    sr_img_np = np.clip(sr_img.squeeze(0).permute(1, 2, 0).detach().cpu().numpy()*0.5+0.5,0,1)
     sr_img_np = (sr_img_np * 255).astype(np.uint8)
 
 
